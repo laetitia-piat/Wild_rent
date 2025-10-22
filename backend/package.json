@@ -7,7 +7,7 @@
     "start": "ts-node-dev --poll ./src/index.ts",
     "build": "tsc",
     "startprod": "node ./dist/index.js",
-    "fixtures": "docker exec -it wild-rent-backend-1 sh -c \"cd src/fixtures && npx ts-node launchFixtures.ts\""
+    "fixtures": "docker exec -it wild_rent-backend-1 sh -c \"cd src/fixtures && npx ts-node launchFixtures.ts\""
   },
   "author": "",
   "license": "ISC",
