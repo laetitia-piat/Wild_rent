@@ -1,0 +1,48 @@
+name: build and push docker images
+ 
+ on:
+  pull_request:
+    branches:
+      - staging
+ 
+ jobs:
+ docker:
+   if: github.ref == 'refs/heads/staging'
+#    Ce job ne s’exécutera que si le push est fait sur la branche staging.
+# Important car le on: push est global, mais ici on le restreint proprement.
+   runs-on: ubuntu-latest
+   steps:
+   - name: Set short git commit SHA
+     id: vars
+     run: |
+      calculatedSha=$(git rev-parse --short ${{ github.sha }})
+      echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+      # Récupère le SHA court du commit (ex: 2f1a9d3)
+      # Le stocke dans une variable d’environnement COMMIT_SHORT_SHA pour pouvoir l’utiliser dans les étapes suivantes
+     - name: Set up QEMU
+       uses: docker/setup-qemu-action@v2
+      # Configure QEMU pour permettre la compilation multi-architecture (utile si tu veux des images ARM/AMD, etc.)
+      # C’est optionnel mais recommandé pour la compatibilité
+     - name: Set up Docker Buildx
+       uses: docker/setup-buildx-action@v2
+      #  Active Docker Buildx, un outil avancé pour construire des images Docker avec plus de flexibilité (multi-plateforme, cache, etc.)
+     - name: Login to Docker Hub
+       uses: docker/login-action@v2
+       with:
+         username: ${{ secrets.DOCKERHUB_USERNAME }}
+         password: ${{ secrets.DOCKERHUB_TOKEN }}
+        # Se connecte à ton compte Docker Hub avec les credentials stockés dans les secrets GitHub
+        # C’est nécessaire pour pouvoir pousser l’image
+     - name: Build and push
+       uses: docker/build-push-action@v4
+       with:
+         push: true
+         context: "{{defaultContext}}:frontend"
+         file: Dockerfile.prod
+         tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ env.COMMIT_SHORT_SHA }}
+      # push: true → Push l’image sur Docker Hub après build
+      # context: "{{defaultContext}}:frontend" → Dossier frontend utilisé comme contexte Docker (où se trouvent les sources
+      # file: Dockerfile.prod → Utilise un Dockerfile.prod spécifique
+      # tags: → L’image est poussée avec 2 tags :
+      # latest → pour toujours avoir la dernière version accessible facilement
+      #   SHA court (ex: frontend:2f1a9d3) → pour un tag unique correspondant  à ce commit

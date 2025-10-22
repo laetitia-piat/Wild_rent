@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "codegen": "npx playwright codegen",
+    "headed": "npx playwright test --headed",
+    "headed-local": "cross-env LOCAL=TRUE npx playwright test --headed"
+  },
+  "dependencies": {
+    "axios": "^1.8.3",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^22.13.10",
+    "cross-env": "^7.0.3"
+  }
+}

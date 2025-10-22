@@ -1,0 +1,40 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node-dev --poll ./src/index.ts",
+    "build": "tsc",
+    "startprod": "node ./dist/index.js",
+    "fixtures": "docker exec -it wild-rent-backend-1 sh -c \"cd src/fixtures && npx ts-node launchFixtures.ts\""
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "argon2": "^0.41.1",
+    "class-validator": "^0.14.2",
+    "cookies": "^0.9.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "graphql": "^16.10.0",
+    "graphql-scalars": "^1.24.1",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.2",
+    "reflect-metadata": "^0.2.2",
+    "resend": "^4.1.2",
+    "stripe": "^18.5.0",
+    "type-graphql": "^2.0.0-rc.2",
+    "typeorm": "^0.3.20",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^9.6.0",
+    "@types/cookies": "^0.9.1",
+    "@types/cors": "^2.8.19",
+    "@types/jsonwebtoken": "^9.0.8",
+    "ts-node-dev": "^2.0.0"
+  }
+}

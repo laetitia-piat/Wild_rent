@@ -1,0 +1,109 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AdminNavbar > correspond au snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex"
+  >
+    <nav
+      class="w-60 h-screen bg-light-beige p-4 flex flex-col transition-all duration-400 shadow-md"
+    >
+      <div
+        class="flex-grow"
+      >
+        <div
+          class="flex items-center justify-between mb-6"
+        >
+          <div
+            class="flex items-center gap-x-2"
+          >
+            <img
+              alt="Wild Rent logo"
+              class="w-10 h-10"
+              src="/assets/images/logo.png"
+            />
+            <h1
+              class="text-xl font-semibold text-gray-800"
+            >
+              Wild Rent
+            </h1>
+          </div>
+          <button
+            class="text-light-beige hover:text-green hover:bg-light-beige rounded-full bg-green cursor-pointer"
+          >
+            <svg
+              class="lucide lucide-chevron-left"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m15 18-6-6 6-6"
+              />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="flex flex-col gap-4 text-gray-700"
+        >
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin"
+          >
+            🏠 Accueil
+          </a>
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin/categorie"
+          >
+            📂 Catégorie
+          </a>
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin/article"
+          >
+            📝 Article
+          </a>
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin/commandes"
+          >
+            📦 Commandes
+          </a>
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin/inventaire"
+          >
+            📊 Inventaire
+          </a>
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin/monCompte"
+          >
+            👤 Mon compte
+          </a>
+          <a
+            class="md:text-xl md:px-4 md:py-2 md:rounded-md md:transition-all md:duration-300 md:border md:border-transparent md:hover:border-gray-500 md:hover:bg-gray-50"
+            data-discover="true"
+            href="/admin/deconnexion"
+          >
+            🚪 Déconnexion
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</DocumentFragment>
+`;
