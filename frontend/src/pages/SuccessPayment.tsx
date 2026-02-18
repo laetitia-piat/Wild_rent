@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateNewOrderMutation } from "../generated/graphql-types";
-import { cartContext } from "../context/CartContext";
-import { useContext } from "react";
+
 import { toast } from "react-toastify";
 import { useUser } from "@/hooks/useUser";
+import { useSelector } from "react-redux";
+import { clearCart, selectCartItems } from "../features/cart/cartSlice";
 
 const Success = () => {
   const [createOrderMutation] = useCreateNewOrderMutation();
@@ -13,8 +14,8 @@ const Success = () => {
   const startDate = cartInfosParsed ? cartInfosParsed.startDate : null;
   const endDate = cartInfosParsed ? cartInfosParsed.endDate : null;
   const totalAmount = cartInfosParsed ? cartInfosParsed.total : null;
+  const items = useSelector(selectCartItems);
 
-  const { items } = useContext(cartContext);
   const navigate = useNavigate();
   const { user } = useUser();
 
@@ -39,10 +40,9 @@ const Success = () => {
           variables: { data: orderData },
           onCompleted: (data) => {
             console.log("commande créé:", data);
-            localStorage.removeItem("cart");
-            localStorage.removeItem("cartInfos");
+            clearCart();
             toast.success(
-              "Votre commande a bien été enregistrée, vous allez être redirigée vers la page d'accueil"
+              "Votre commande a bien été enregistrée, vous allez être redirigée vers la page d'accueil",
             );
             setTimeout(() => {
               navigate("/");

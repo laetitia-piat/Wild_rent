@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { cartContext } from "../context/CartContext";
+import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   useCheckProductAvailabilityLazyQuery,
@@ -8,6 +7,14 @@ import {
 import { useRentalDates } from "@/hooks/useRentalDates";
 import { SelectRentalDates } from "@/components/SelectRentalDates";
 import { Button } from "@/components/ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decrementQty,
+  incrementQty,
+  selectCartItems,
+  selectCartTotal,
+  removeItemFromCart,
+} from "../features/cart/cartSlice";
 
 type AvailabilityResult = {
   available: boolean | undefined;
@@ -15,13 +22,10 @@ type AvailabilityResult = {
 };
 
 const Cart = () => {
-  const { items, removeItemFromCart, updateQuantity } = useContext(
-    cartContext
-  ) as {
-    items: any[];
-    removeItemFromCart: (index: number) => void;
-    updateQuantity: (quantity: number) => void;
-  };
+  const dispatch = useDispatch();
+  const items: any = useSelector(selectCartItems);
+  const total = useSelector(selectCartTotal);
+
   const { startDate, endDate } = useRentalDates();
   const [availabilityResults, setAvailabilityResults] = useState<
     Record<number, AvailabilityResult>
@@ -37,13 +41,9 @@ const Cart = () => {
   const duration =
     startDate && endDate ? calculateDuration(startDate, endDate) : 0;
 
-  const total = items
-    .map((item: any) => item.price * item.quantity * duration)
-    .reduce((acc, price) => acc + price, 0);
-
   useEffect(() => {
     if (!items || items.length === 0 || !startDate || !endDate) return;
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       checkProductAvailability({
         variables: {
           productId: item.selectedOption.id,
@@ -66,20 +66,10 @@ const Cart = () => {
     });
   }, [items, startDate, endDate]);
 
-  const handleRemoveClick = (index: number) => {
-    removeItemFromCart(index);
-  };
-  const handleAddQuantity = (product: any) => {
-    updateQuantity(product.quantity++);
-  };
-  const handleRemoveQuantity = (product: any) => {
-    updateQuantity(product.quantity--);
-  };
-
   const handleCheckout = async () => {
     localStorage.setItem(
       "cartInfos",
-      JSON.stringify({ startDate, endDate, total })
+      JSON.stringify({ startDate, endDate, total }),
     );
     getStripeSession({
       variables: {
@@ -105,7 +95,7 @@ const Cart = () => {
   };
 
   const allProductAvailable = Object.values(availabilityResults).every(
-    (result) => result.available
+    (result) => result.available,
   );
 
   if (!startDate || !endDate || items.length === 0)
@@ -160,7 +150,7 @@ const Cart = () => {
             </h3>
           </div>
           <div className="bg-white flex justify-center flex-col md:p-4 items-center">
-            {items.map((item, index) => {
+            {items.map((item: any, index: number) => {
               const itemAvailable =
                 availabilityResults[item.selectedOption.id]?.available;
               const availableQty =
@@ -194,7 +184,7 @@ const Cart = () => {
                           <div className="flex flex-row">
                             <button
                               className="bg-[#D9D9D9] w-6 h-6 md:w-8 lg:w-10 xl:w-14 rounded-tl-lg rounded-bl-lg text-center hover:cursor-pointer"
-                              onClick={() => handleRemoveQuantity(item)}
+                              onClick={() => dispatch(decrementQty(item.id))}
                             >
                               -
                             </button>
@@ -206,7 +196,7 @@ const Cart = () => {
                             </div>
                             <button
                               className="bg-[#D9D9D9] w-6 md:w-8 lg:w-10 xl:w-14 rounded-tr-lg rounded-br-lg text-center hover:cursor-pointer"
-                              onClick={() => handleAddQuantity(item)}
+                              onClick={() => dispatch(incrementQty(item.id))}
                             >
                               +
                             </button>
@@ -221,7 +211,9 @@ const Cart = () => {
                         </div>
                         <div className="mt-1 ml-2 md:ml-3  lg:mb-4 lg:ml-5 ">
                           <button
-                            onClick={() => handleRemoveClick(index)}
+                            onClick={() =>
+                              dispatch(removeItemFromCart(item.id))
+                            }
                             className="hover:cursor-pointer"
                           >
                             <img
@@ -245,7 +237,7 @@ const Cart = () => {
           </div>
           <div className="w-1/2 m-auto mt-4 flex justify-between items-center mb-4">
             <p className="text-2xl">Total: </p>
-            <p className="text-2xl">{total}€</p>
+            <p className="text-2xl">{total.toFixed(2) * duration}€</p>
           </div>
           <div className="flex justify-center pb-8 pt-8">
             <Button

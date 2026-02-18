@@ -1,23 +1,22 @@
 import { useNavigate, useParams } from "react-router-dom";
-
 import {
   useGetAvailableProductOptionsQuery,
   useGetProductByIdQuery,
 } from "../generated/graphql-types";
-import { useContext, useState } from "react";
-import { cartContext } from "../context/CartContext";
+import { useState } from "react";
 import { useRentalDates } from "@/hooks/useRentalDates";
 import { ShieldAlert } from "lucide-react";
 import { toUTCISOString } from "@/components/CategoryCarousel";
 import { SelectRentalDates } from "@/components/SelectRentalDates";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "@/features/cart/cartSlice";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
   const { id }: any = useParams();
-  const { addItemToCart } = useContext(cartContext);
   const { startDate, endDate } = useRentalDates();
   const isE2E = import.meta.env.VITE_E2E_TEST === "true";
-
+  const dispatch = useDispatch();
   const { loading, error, data } = useGetProductByIdQuery({
     variables: { getProductByIdId: parseInt(id) },
   });
@@ -153,7 +152,7 @@ const ProductDetails = () => {
                     ...products,
                     selectedOption,
                   };
-                  addItemToCart(productWithOptions);
+                  dispatch(addItemToCart(productWithOptions));
                   if (!isE2E) {
                     navigate(-1);
                   }

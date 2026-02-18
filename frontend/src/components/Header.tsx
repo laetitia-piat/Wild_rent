@@ -1,30 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useWhoamiQuery } from "../generated/graphql-types";
-import { useContext, useEffect, useState } from "react";
-import { cartContext } from "../context/CartContext";
 import { Settings, ShoppingCart, UserRound } from "lucide-react";
+import { useSelector } from "react-redux";
+import { selectCartCount } from "../features/cart/cartSlice";
 
 const Header = () => {
   const { loading, error, data } = useWhoamiQuery();
-  const { items } = useContext(cartContext);
+  const count = useSelector(selectCartCount);
 
   const location = useLocation();
   const pathname = location.pathname;
 
   const isAdminPath = pathname.includes("/admin");
-  const [showPlusOne, setShowPlusOne] = useState(false);
-  const [prevCount, setPrevCount] = useState(items.length);
 
-  useEffect(() => {
-    if (location.pathname === "/panier") return;
-
-    if (items.length > prevCount) {
-      setShowPlusOne(true);
-      setTimeout(() => setShowPlusOne(false), 600);
-    }
-    setPrevCount(items.length);
-  }, [items.length, location.pathname]);
   if (loading) return <p>Loading...</p>;
   if (error)
     return (
@@ -90,15 +79,10 @@ const Header = () => {
                 className="flex flex-col items-center hover:underline text-green"
                 to={"/panier"}
               >
-                {showPlusOne && (
-                  <span className="absolute top-15 right-2 text-xs bg-green-600 text-white px-1 rounded-full animate-pop-up z-10">
-                    +1
-                  </span>
-                )}
                 <div className="relative">
                   <ShoppingCart />
                   <div className="absolute w-4 h-4 -top-1 -right-3 text-xs flex justify-center items-center font-bold text-white rounded-full bg-green">
-                    {items.length}
+                    {count}
                   </div>
                 </div>
 

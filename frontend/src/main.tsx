@@ -4,9 +4,10 @@ import "./index.css";
 import App from "./App.tsx";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { BrowserRouter } from "react-router-dom";
-import { CartContextProvider } from "./context/CartContext";
 import { UserProvider } from "./context/UserContext.tsx";
 import { RentalDatesProvider } from "./context/RentalDatesContext.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store.ts";
 
 export const client = new ApolloClient({
   uri: "/api",
@@ -18,14 +19,14 @@ createRoot(document.getElementById("root")!).render(
   <ApolloProvider client={client}>
     <UserProvider>
       <RentalDatesProvider>
-        <CartContextProvider>
+        <Provider store={store}>
           <StrictMode>
             <BrowserRouter>
               <App />
             </BrowserRouter>
           </StrictMode>
-        </CartContextProvider>
+        </Provider>
       </RentalDatesProvider>
     </UserProvider>
-  </ApolloProvider>
+  </ApolloProvider>,
 );
